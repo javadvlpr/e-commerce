@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+
+        table th {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightyellow;
+        }
+        form {
+            display: inline-block;
+        }
+        button {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        button a {
+            text-decoration: none;
+            color: #fff;
+        }
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 70%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            animation-name: modalopen;
+            animation-duration: 0.3s;
+            border-radius: 5px;
+        }
+
+        @keyframes modalopen {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        select {
+            height: 38px;
+        }
+
+        .my-button {
+            background-color: cadetblue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .my-button:hover {
+            background-color: #45a049;
+        }
+
+        .alert {
+            position: relative;
+            top: 10;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 10px;
+            margin: 10px;
+            line-height: 1.8;
+            border-radius: 5px;
+            cursor: hand;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-weight: 400;
+        }
+
+        .alertCheckbox {
+            display: none;
+        }
+
+        :checked + .alert {
+            display: none;
+        }
+
+        .alertText {
+            display: table;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .alertClose {
+            float: right;
+            padding-top: 5px;
+            font-size: 10px;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .info {
+            background-color: #EEE;
+            border: 1px solid #DDD;
+            color: #999;
+        }
+
+        .success {
+            background-color: #EFE;
+            border: 1px solid #DED;
+            color: #9A9;
+        }
+
+        .notice {
+            background-color: #EFF;
+            border: 1px solid #DEE;
+            color: #9AA;
+        }
+
+        .warning {
+            background-color: #FDF7DF;
+            border: 1px solid #FEEC6F;
+            color: #C9971C;
+        }
+
+        .error {
+            background-color: #FEE;
+            border: 1px solid #EDD;
+            color: #A66;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            position: fixed;
+            buttom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="background-color: lightyellow">
+<li sec:authorize="hasAnyRole('ADMIN','SUPER_ADMIN')">
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody th:each="category : ${categories}">
+    <tr>
+        <td>
+            <a th:text="${category.id}"></a>
+        </td>
+        <td>
+            <a th:href="@{/category/get-by-id/{id}(id=${category.id})}" th:text="${category.name}"></a>
+        </td>
+        <td>
+            <button onclick="openModal1(this)">Update</button>
+        </td>
+        <td><button><a th:href="@{/category/delete/{id}(id=${category.id})}">DELETE</a></button></td>
+    </tr>
+    </tbody>
+</table>
+<div class="button-container">
+    <button><a href='/menu' data-item='MENU'>Main menu</a></button>
+</div>
+<label th:if="${#lists.isEmpty(categories)}">
+    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+    <div class="alert info">
+        <span class="alertClose">X</span>
+        <span class="alertText">
+            <p>no child category</p>
+        </span>
+    </div>
+</label>
+
+<div id="modal" class="modal-container">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal1()">&times;</span>
+        <form action="/category/update_category" method="post">
+            <div class="field padding-bottom--24">
+                <label>ID</label>
+                <input type="text" name="id" readonly>
+            </div>
+            <div class="field padding-bottom--24">
+                <label>Name</label>
+                <input type="text" name="name" required>
+            </div>
+            <select id="category" name="categoryId">
+                <option><a>no</a></option>
+                <option th:each="parent : ${all}" th:value="${parent.id}" th:text="${parent.name}"></option>
+            </select>
+            <div class="field padding-bottom--24">
+                <button type="submit" name="submit" class="my-button">UPDATE</button>
+            </div>
+        </form>
+    </div>
+</div>
+</li>
+<script>
+    function openModal1(button) {
+        var row = button.parentNode.parentNode;
+        var id = row.cells[0].innerText;
+        var name = row.cells[1].innerText;
+
+        var modalId = document.querySelector("#modal [name='id']");
+        var modalName = document.querySelector("#modal [name='name']");
+
+        modalId.value = id;
+        modalName.value = name;
+
+        // Open the modal
+        document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal1() {
+        // Close the modal
+        document.getElementById("modal").style.display = "none";
+    }
+</script>
+<button onclick="openModal()">CREATE</button>
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <button class="close-button" onclick="closeModal()">x</button>
+        <h1>Add Category</h1>
+        <form action="/category/add-category" method="post">
+            <input type="text" name="name" placeholder="Category name" required>
+            <input type="text" name="parentName" placeholder="Parent category name / no">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+<div th:if="${exception != null}">
+    <label>
+        <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+        <div class="alert info">
+            <span class="alertClose">X</span>
+            <span class="alertText"><p th:text="${exception}"></p></span>
+        </div>
+    </label>
+</div>
+<script>
+    function openModal() {
+        document.getElementById("modal1").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("modal1").style.display = "none";
+    }
+</script>
+</body>
+</html>

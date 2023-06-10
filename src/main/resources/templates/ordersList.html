@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+
+        table th {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightyellow;
+        }
+        form {
+            display: inline-block;
+        }
+        button {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        select {
+            background-color: darkcyan;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        button a {
+            text-decoration: none;
+            color: #fff;
+        }
+        option {
+            background-color: darkgreen;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        .alert {
+            position: relative;
+            top: 10;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 10px;
+            margin: 10px;
+            line-height: 1.8;
+            border-radius: 5px;
+            cursor: hand;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-weight: 400;
+        }
+
+        .alertCheckbox {
+            display: none;
+        }
+
+        :checked + .alert {
+            display: none;
+        }
+
+        .alertText {
+            display: table;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .alertClose {
+            float: right;
+            padding-top: 5px;
+            font-size: 10px;
+        }
+        .pagination {
+            display: inline-block;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+
+        .pagination a.active {
+            background-color: dodgerblue;
+            color: white;
+            border: 1px solid dodgerblue;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            position: fixed;
+            buttom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<li sec:authorize="hasAnyRole('ADMIN','SUPER_ADMIN')">
+<table>
+    <thead>
+    <tr>
+        <th>Owner</th>
+        <th>Total price</th>
+        <th>Products</th>
+        <th>Status</th>
+        <th>Amount</th>
+        <th>Create Date</th>
+        <th>Change Status</th>
+    </tr>
+    </thead>
+    <!--/*@thymesVar id="order" type="com.example.onlineshop.entity.OrderEntity"*/-->
+    <tbody th:each="order : ${orders}">
+    <tr>
+        <td th:text="${order.user.username}"></td>
+        <td th:text="${order.price}"></td>
+        <td th:text="${order.products.get(0).name}"></td>
+        <td th:text="${order.orderStatus}"></td>
+        <td th:text="${order.amount}"></td>
+        <td th:text="${order.createdDate}"></td>
+        <td>
+            <form th:action="@{/orders/change-status}" method="post">
+                <input type="hidden" name="id" th:value="${order.id}">
+                <select name="status">
+                    <option value="NEW">NEW</option>
+                    <option value="REJECTED">REJECTED</option>
+                    <option value="ACCEPTED">ACCEPTED</option>
+                </select>
+                <button type="submit">Change</button>
+            </form>
+    </tr>
+    </tbody>
+</table>
+<div class="button-container">
+    <button><a href='/menu' data-item='MENU'>Main menu</a></button>
+</div>
+<br>
+<div class="pagination">
+    <th:block th:each="page : ${#numbers.sequence(1, pages)}">
+        <a th:href="@{/orders/get-all/{page}(page=${page})}" th:text="${page}"></a>
+    </th:block>
+</div>
+<!--/*@thymesVar id="exception" type="com.example.onlineshop.exceptions"*/-->
+<div th:if="${exception != null}">
+    <label>
+        <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+        <div class="alert info">
+            <span class="alertClose"></span>
+            <span class="alertText"><p th:text="${exception}"></p></span>
+        </div>
+    </label>
+</div>
+</li>
+</body>
+</html>

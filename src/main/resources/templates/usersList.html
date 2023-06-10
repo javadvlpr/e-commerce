@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>User LIST</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+
+        table th {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightyellow;
+        }
+        button {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+        .alert {
+            position: relative;
+            top: 10;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 10px;
+            margin: 10px;
+            line-height: 1.8;
+            border-radius: 5px;
+            cursor: hand;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-weight: 400;
+        }
+
+        .alertCheckbox {
+            display: none;
+        }
+
+        :checked + .alert {
+            display: none;
+        }
+
+        .alertText {
+            display: table;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .alertClose {
+            float: right;
+            padding-top: 5px;
+            font-size: 10px;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .info {
+            background-color: #EEE;
+            border: 1px solid #DDD;
+            color: #999;
+        }
+
+        .success {
+            background-color: #EFE;
+            border: 1px solid #DED;
+            color: #9A9;
+        }
+
+        .notice {
+            background-color: #EFF;
+            border: 1px solid #DEE;
+            color: #9AA;
+        }
+
+        .warning {
+            background-color: #FDF7DF;
+            border: 1px solid #FEEC6F;
+            color: #C9971C;
+        }
+
+        .error {
+            background-color: #FEE;
+            border: 1px solid #EDD;
+            color: #A66;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+
+        table th {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightyellow;
+        }
+
+        button {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 70%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            animation-name: modalopen;
+            animation-duration: 0.3s;
+            border-radius: 5px;
+        }
+
+        @keyframes modalopen {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        select {
+            height: 38px;
+        }
+
+        .my-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .my-button:hover {
+            background-color: #45a049;
+        }
+        /* Checkbox container */
+        .checkbox-label {
+            display: block;
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Hide default checkbox */
+        .checkbox-label input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Custom checkbox */
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border: 2px solid #333;
+        }
+
+        /* Checkmark when checked */
+        .checkbox-label input:checked ~ .checkmark {
+            background-color: #333;
+        }
+
+        /* Checkmark icon */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show checkmark icon when checked */
+        .checkbox-label input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Checkmark icon style */
+        .checkbox-label .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid #4CAF50;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        button a {
+            text-decoration: none;
+            color: #fff;
+        }
+    </style>
+    <style>
+        /* Modal styles */
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px; /* Adjust the width as per your requirement */
+            max-width: 80%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* Form styles */
+        form {
+            margin-top: 20px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .label {
+            display: flex;
+            align-items: center;
+        }
+
+        .label p {
+            margin-left: 5px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Alert styles */
+        .alertCheckbox {
+            display: none;
+        }
+
+        .alert {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f44336;
+            color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            z-index: 999;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .alertText {
+            margin: 0;
+        }
+
+        .alertClose {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Show/hide alert */
+        .alertCheckbox:checked ~ .alert {
+            display: block;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            position: fixed;
+            buttom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="background-color: lightgoldenrodyellow">
+<li sec:authorize="hasAnyRole('ADMIN','SUPER_ADMIN')">
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>nickName</th>
+        <th>username</th>
+        <th>Roles</th>
+        <th>Permissions</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody th:each="user : ${users}">
+    <tr>
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.username}"></td>
+        <td>
+                <span th:each="role : ${user.roles}">
+                    <span th:text="${role}"></span>
+                </span>
+        </td>
+        <td>
+                <span th:each="permission : ${user.permissions}">
+                    <span th:text="${permission}"></span>
+                </span>
+        </td>
+        <td><button onclick="openModal(this)">Update</button></td>
+        <td><button><a th:href="@{/user/block_admin/{id}(id=${user.id})}">DELETE</a></button></td>
+    </tr>
+    <div id="modal-form" class="modal-container">
+        <div class="modal-content">
+            <form th:action="@{/user/update_admin/{id}(id=${user.id})}" method="post" th:object="${Permissions}">
+                <h2>Edit User Permissions</h2>
+                <div class="user-info">
+                    <div class="field padding-bottom--24">
+                        <label>ID</label>
+                        <input type="text" name="id" readonly>
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <label>username</label>
+                        <input type="text" name="username" readonly>
+                    </div>
+                </div>
+                <div class="permissions">
+                    <label class="label checkbox-label">
+                        <input type="checkbox" name="permissions" value="ADD">
+                        <span>Add</span>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="label checkbox-label">
+                        <input type="checkbox" name="permissions" value="EDIT">
+                        <span>Edit</span>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="label checkbox-label">
+                        <input type="checkbox" name="permissions" value="DELETE">
+                        <span>Delete</span>
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <button type="submit" class="update-button">Update</button>
+            </form>
+        </div>
+    </div>
+    </tbody>
+</table>
+<div class="button-container">
+    <button><a href='/menu' data-item='MENU'>Main menu</a></button>
+</div>
+<body>
+<button onclick="openModal1()">CREATE</button>
+
+<div id="modal-form1" class="modal-container">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal1()">&times;</span>
+        <form action="/user/create_admin" method="post">
+            <div class="field">
+                <label for="name">Admin Name</label>
+                <input type="text" id="name" name="name" placeholder="Admin name" required>
+            </div>
+            <div class="field">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="field">
+                <label for="password">Admin Password</label>
+                <input type="password" id="password" name="password" placeholder="Admin password" required>
+            </div>
+            <div class="field">
+                <label for="roles">Roles</label>
+                <select class="select" name="roles">
+                    <optgroup label="Roles">
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+                        <option value="USER">USER</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="field">
+                <label>Permissions</label>
+                <label class="label radio-label">
+                    <input type="checkbox" name="permissions" value="ADD">
+                    <p>ADD</p>
+                </label>
+                <label class="label radio-label">
+                    <input type="checkbox" name="permissions" value="DELETE">
+                    <p>DELETE</p>
+                </label>
+                <label class="label radio-label">
+                    <input type="checkbox" name="permissions" value="EDIT">
+                    <p>EDIT</p>
+                </label>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+<div th:if="${exception != null}">
+    <label>
+        <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+        <div class="alert info">
+            <span class="alertClose">X</span>
+            <span class="alertText"><p th:text="${exception}"></p></span>
+        </div>
+    </label>
+</div>
+</li>
+<script>
+    function openModal(button) {
+        var modal = document.getElementById("modal-form");
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+        modal.style.display = "block";
+
+        var row = button.parentNode.parentNode;
+        var id = row.cells[0].innerText;
+        var username = row.cells[2].innerText;
+        var roles = row.cells[3].innerText.split('\n');
+        var permissions = row.cells[4].innerText.split('\n');
+
+        var modalId = document.querySelector("#modal-form [name='id']");
+        var modalUsername = document.querySelector("#modal-form [name='username']");
+        var modalRoles = document.querySelectorAll("#modal-form [name='roles']");
+        var modalPermissions = document.querySelectorAll("#modal-form [name='permissions']");
+
+        modalId.value = id;
+        modalUsername.value = username;
+
+        modalRoles.forEach(function (roleCheckbox) {
+            roleCheckbox.checked = roles.includes(roleCheckbox.value);
+        });
+
+        modalPermissions.forEach(function (permissionCheckbox) {
+            permissionCheckbox.checked = permissions.includes(permissionCheckbox.value);
+        });
+    }
+</script>
+<script>
+    function openModal1() {
+        var modal = document.getElementById("modal-form1");
+        modal.style.display = "block";
+    }
+
+    function closeModal1() {
+        var modal = document.getElementById("modal-form1");
+        modal.style.display = "none";
+    }
+
+    var modal = document.getElementById("modal-form1");
+    modal.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            closeModal1();
+        }
+    });
+</script>
+</body>
+</html>

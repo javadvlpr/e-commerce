@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Show products</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+
+        table th {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightyellow;
+        }
+
+        button {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 70%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            animation-name: modalopen;
+            animation-duration: 0.3s;
+            border-radius: 5px;
+        }
+
+        @keyframes modalopen {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        select {
+            height: 38px;
+        }
+
+        .my-button {
+            background-color: cadetblue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .my-button:hover {
+            background-color: #45a049;
+        }
+
+        .alert {
+            position: relative;
+            top: 10;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 10px;
+            margin: 10px;
+            line-height: 1.8;
+            border-radius: 5px;
+            cursor: hand;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-weight: 400;
+        }
+
+        .alertCheckbox {
+            display: none;
+        }
+
+        :checked + .alert {
+            display: none;
+        }
+
+        .alertText {
+            display: table;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .alertClose {
+            float: right;
+            padding-top: 5px;
+            font-size: 10px;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .info {
+            background-color: #EEE;
+            border: 1px solid #DDD;
+            color: #999;
+        }
+
+        .success {
+            background-color: #EFE;
+            border: 1px solid #DED;
+            color: #9A9;
+        }
+
+        .notice {
+            background-color: #EFF;
+            border: 1px solid #DEE;
+            color: #9AA;
+        }
+
+        .warning {
+            background-color: #FDF7DF;
+            border: 1px solid #FEEC6F;
+            color: #C9971C;
+        }
+
+        .error {
+            background-color: #FEE;
+            border: 1px solid #EDD;
+            color: #A66;
+        }
+        button a {
+            text-decoration: none;
+            color: #fff;
+        }
+        .pagination {
+            display: inline-block;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+
+        .pagination a.active {
+            background-color: dodgerblue;
+            color: white;
+            border: 1px solid dodgerblue;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+    </style>
+    <style>
+        /* Styles for the modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            position: fixed;
+            buttom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="background-color: lightyellow">
+<li sec:authorize="hasAnyRole('ADMIN','SUPER_ADMIN')">
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>product name</th>
+        <th>price</th>
+        <th>amount</th>
+        <th>category</th>
+        <th>info</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody th:each="product : ${products}">
+    <tr>
+        <!--/*@thymesVar id="product" type="com.example.onlineshop.entity.ProductEntity"*/-->
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.price}"></td>
+        <td th:text="${product.amount}"></td>
+        <td th:text="${product.categories.name}"></td>
+        <td th:text="${product.param}"></td>
+        <td><button onclick="openModal(this)">Update</button></td>
+        <div th:with="chooseProduct='product'">
+        </div>
+        <td><button><a th:href="@{/product/delete/{id}(id=${product.id})}">DELETE</a></button></td>
+    </tr>
+    <tr>
+    </tr>
+    </tbody>
+</table>
+<div class="button-container">
+    <button><a href='/menu' data-item='MENU'>Main menu</a></button>
+</div>
+<!-- Create the modal form -->
+<div id="modal-form" class="modal-container">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <!--        <form th:action="@{/product/update_product/{id}(id=${chooseProduct.id})}" method="post">-->
+        <form action="/product/update_product" method="post">
+            <div class="field padding-bottom--24">
+                <label>ID</label>
+                <input type="text" name="id" readonly>
+            </div>
+            <div class="field padding-bottom--24">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="prev:" required>
+            </div>
+            <div class="field padding-bottom--24">
+                <label>Price</label>
+                <input type="number" name="price" min="10" placeholder="prev:" required>
+            </div>
+            <div class="field padding-bottom--24">
+                <label>Amount</label>
+                <input type="number" name="amount" min="10" placeholder="prev:" required>
+            </div>
+            <div class="field padding-bottom--24">
+                <label>Param</label>
+                <input type="text" name="param" min="10" required>
+            </div>
+            <select class="select" name="category" required>
+                <optgroup label="Categories">
+                    <tbody th:each="category : ${categories}">
+                    <option th:value="${category.name}" th:text="${category.name}"></option>
+                    </tbody>
+                </optgroup>
+            </select>
+            <div class="field padding-bottom--24">
+                <button type="submit" name="submit" class="my-button">UPDATE</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Button to show the modal -->
+<button onclick="openModal1()">Create Product</button>
+
+<!-- The modal form -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <!-- Close button -->
+        <span class="close" onclick="closeModal1()">&times;</span>
+        <h2>Add Product</h2>
+        <!-- Form -->
+        <form action="/product/create_product" method="post">
+            <label for="name">Product Name:</label>
+            <input type="text" id="name" name="name" placeholder="Product Name" required>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" min="1" placeholder="Price" required>
+
+            <label for="amount">Amount of Product:</label>
+            <input type="number" id="amount" name="amount" min="10" placeholder="Amount of Product" required>
+
+            <label for="param">Info of Product:</label>
+            <input type="text" id="param" name="param" placeholder="Info of Product" required>
+
+            <label for="category">Category:</label>
+            <select id="category" name="category" class="select">
+                <optgroup label="Categories">
+                    <tbody th:each="category : ${categories}">
+                    <option th:value="${category.name}" th:text="${category.name}"></option>
+                    </tbody>
+                </optgroup>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+        <div th:if="${exception != null}">
+            <label>
+                <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+                <div class="alert info">
+                    <span class="alertClose">X</span>
+                    <span class="alertText"><p th:text="${exception}"></p></span>
+                </div>
+            </label>
+        </div>
+    </div>
+</div>
+<div th:if="${exception != null}">
+    <label>
+        <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+        <div class="alert info">
+            <span class="alertClose">X</span>
+            <span class="alertText"><p th:text="${exception}"></p></span>
+        </div>
+    </label>
+</div>
+</li>
+<script>
+    function openModal(button) {
+        var modal = document.getElementById("modal-form");
+        modal.style.display = "block";
+
+        var row = button.parentNode.parentNode;
+        var id = row.cells[0].innerText;
+        var name = row.cells[1].innerText;
+        var price = row.cells[2].innerText;
+        var amount = row.cells[3].innerText;
+        var param = row.cells[5].innerText;
+        var category = row.cells[4].innerText;
+
+        var modalId = document.querySelector("#modal-form [name='id']");
+        var modalName = document.querySelector("#modal-form [name='name']");
+        var modalPrice = document.querySelector("#modal-form [name='price']");
+        var modalAmount = document.querySelector("#modal-form [name='amount']");
+        var modalParam = document.querySelector("#modal-form [name='param']");
+        var modalCategory = document.querySelector("#modal-form [name='category']");
+
+
+        modalId.value = id;
+        modalName.value = name;
+        modalPrice.value = price;
+        modalAmount.value = amount;
+        modalParam.value = param;
+        modalCategory.value = category;
+    }
+    let modalEdit = document.querySelector('.modal-container')
+    var closeModal = function() {
+        modalEdit.style.display = "none";
+    };
+    closeBtn.addEventListener('click', closeModal);
+    var modal = document.getElementById("modal-form");
+
+    modal.addEventListener("click", function(event) {
+        if (event.target === modalEdit) {
+            modalEdit.style.display = "none";
+        }
+    });
+
+</script>
+<script>
+    // Get the modal element
+    var modal = document.getElementById('modal');
+
+    // Get the button that opens the modal
+    var button = document.querySelector('button');
+
+    // Get the close button
+    var closeBtn = document.getElementsByClassName('close')[0];
+
+    // Function to open the modal
+    function openModal1() {
+        modal.style.display = 'block';
+    }
+
+    // Function to close the modal
+    function closeModal1() {
+        modal.style.display = 'none';
+    }
+
+    // Event listener for the button to open the modal
+    button.addEventListener('click', openModal);
+
+    // Event listener for the close button to close the modal
+    closeBtn.addEventListener('click', closeModal);
+</script>
+<div class="pagination">
+    <th:block th:each="page : ${#numbers.sequence(1, pages)}">
+        <a th:href="@{/product/product_list/{page}(page=${page})}" th:text="${page}"></a>
+    </th:block>
+</div>
+
+</body>
+</html>
