@@ -22,4 +22,5 @@ public class OrderController {
         model.addAttribute("orders",orderService.getAllOrders(0,model));
         return "ordersList";
     }
+
 }

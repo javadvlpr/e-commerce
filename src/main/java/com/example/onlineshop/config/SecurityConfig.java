@@ -1,5 +1,6 @@
 package com.example.onlineshop.config;
 
+import com.example.onlineshop.telegramBOT.controller.BotMY;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthService authService;
+    private final BotMY botMY;
     private final PasswordEncoder passwordEncoder;
     private final String[] WHITE_LIST = {"/auth/**", "/","/bot"};
     @Bean
@@ -45,6 +47,14 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        TelegramBotsApi telegramBotsApi;
+        try {
+            telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramBotsApi.registerBot(botMY);
+            System.err.println("Bot is running");
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(authService)
