@@ -1,6 +1,5 @@
 package com.example.onlineshop.config;
 
-import com.example.onlineshop.telegramBOT.controller.BotMY;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
